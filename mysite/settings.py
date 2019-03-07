@@ -130,3 +130,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static'),
 
 ]
+
+
+# 自定义参数
+EACH_PAGE_BLOGS_NUMBER = 7
