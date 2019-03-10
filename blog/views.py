@@ -2,7 +2,8 @@ from django.shortcuts import render,render_to_response,get_object_or_404
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.db.models import Count 
-from .models import Blog,BlogType,ReadNum    
+from .models import Blog,BlogType 
+from read_statistics.utils import read_statistics_once_read   
 
 # Create your views here.
 
@@ -75,22 +76,12 @@ def blogs_with_date(request,year,month):
 
 def blog_detail(request,blog_pk):
     blog = get_object_or_404(Blog,pk=blog_pk)
-    if not request.COOKIES.get('blog_%s_readed' %blog_pk):
-        if ReadNum.objects.filter(blog=blog).count():
-            #存在记录
-            readnum = ReadNum.objects.get(blog=blog)
-        else:
-            #不存在记录
-            readnum = ReadNum(blog=blog)
-        #计数加1
-        readnum.read_num += 1
-        readnum.save()
-
+    read_cookie_key = read_statistics_once_read(request,blog)
 
     context = {}
     context['previous_blog'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['next_blog'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['blog'] = blog
     response = render_to_response('blog/blog_detail.html',context) #响应
-    response.set_cookie('blog_%s_readed' %blog_pk,'true')
+    response.set_cookie(read_cookie_key,'true') #阅读cookie标记
     return response
