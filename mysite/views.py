@@ -56,12 +56,12 @@ def register(request):
     if request.method == 'POST':
         reg_form = RegForm(request.POST)
         if reg_form.is_valid():
-            username = login_form.cleaned_data['username']
-            email = login_form.cleaned_data['email']
-            password = login_form.cleaned_data['password']
+            username = reg_form.cleaned_data['username']
+            email = reg_form.cleaned_data['email']
+            password = reg_form.cleaned_data['password']
             #创建用户
             user = User.objects.create_user(username,email,password)
-            user.sava()
+            user.save()
             #登录用户
             user = auth.authenticate(username=username, password=password)
             auth.login(request,user)
