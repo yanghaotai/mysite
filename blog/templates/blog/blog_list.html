@@ -118,6 +118,8 @@
                                         {{ blog_date | date:"Y年m月" }} ({{ blog_count }})
                                     </a>
                                 </li>
+                            {% empty %}
+                                <li>暂无归档</li>
                             {% endfor %}
                         </ul>
                     </div>
