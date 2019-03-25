@@ -1,3 +1,4 @@
-{{ comment_text }}
-<br>
-<a href="http://118.24.90.64:8013{{ url }}">点击查看</a>
+{% autoescape off %}
+    <p>{{ comment_text|safe }}</p>
+    <a href="http://118.24.90.64:8013{{ url }}">点击查看</a>
+{% endautoescape %}
